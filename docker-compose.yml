@@ -8,8 +8,8 @@ services:
     volumes:
       - /var/lib/jenkins/workspace/Attendance:/app
     working_dir: /app
-    # We clean the .next folder first to ensure a fresh build
-    command: sh -c "rm -rf .next && npm install && npm run build && npm start"
+    # Explicitly installing typescript and types before the build
+    command: sh -c "rm -rf .next && npm install && npm install -D typescript @types/react @types/node && npm run build && npm start"
     environment:
       - MONGODB_URI=mongodb://db-jenkins:27017/student-attendance
       - NODE_ENV=production
