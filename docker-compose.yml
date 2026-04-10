@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  attendance-app-jenkins:
+    image: node:20-alpine
+    container_name: attendance_web_jenkins
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: sh -c "npm install && npm start"
+    environment:
+      - MONGODB_URI=mongodb://db-jenkins:27017/student-attendance
+    depends_on:
+      - db-jenkins
+
+  db-jenkins:
+    image: mongo:latest
+    container_name: attendance_db_jenkins
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo-data-jenkins:/data/db
+
+volumes:
+  mongo-data-jenkins:
