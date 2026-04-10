@@ -8,8 +8,8 @@ services:
     volumes:
       - /var/lib/jenkins/workspace/Attendance:/app
     working_dir: /app
-    # We manually install typescript and types first to satisfy next.config.ts
-    command: sh -c "rm -rf .next && npm install && npm install -D typescript @types/react @types/node && npm run build && npm start"
+    # This completely wipes the slate clean before installing
+    command: sh -c "rm -rf node_modules .next package-lock.json && npm install && npm run build && npm start"
     environment:
       - MONGODB_URI=mongodb://db-jenkins:27017/student-attendance
       - NODE_ENV=production
