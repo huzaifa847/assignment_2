@@ -8,12 +8,11 @@ services:
     volumes:
       - /var/lib/jenkins/workspace/Attendance:/app
     working_dir: /app
-    # The --host 0.0.0.0 is crucial for Vite/Next.js apps
-    command: sh -c "npm install && (npm run dev -- --host 0.0.0.0 || npm start || node server.js)"
+    # The 'npm run build' step is the missing piece here
+    command: sh -c "npm install && npm run build && npm start"
     environment:
       - MONGODB_URI=mongodb://db-jenkins:27017/student-attendance
-      - HOST=0.0.0.0
-      - PORT=3000
+      - NODE_ENV=production
     depends_on:
       - db-jenkins
 
