@@ -1,21 +1,23 @@
 version: '3.8'
 services:
   attendance-app-jenkins:
-    image: node:20-alpine
+    image: node:20-slim # Changed from alpine to slim to save extraction space
     container_name: attendance_web_jenkins
     ports:
       - "3000:3000"
     volumes:
       - .:/app
     working_dir: /app
-    command: sh -c "npm install && npm run dev"
+    # Using --production saves space by not installing devDependencies
+    command: sh -c "npm install --production && npm run dev"
     environment:
       - MONGODB_URI=mongodb://db-jenkins:27017/student-attendance
     depends_on:
       - db-jenkins
 
   db-jenkins:
-    image: mongo:latest
+    # Alpine-based Mongo is much smaller than the standard one
+    image: mongo:4.4-bionic 
     container_name: attendance_db_jenkins
     ports:
       - "27018:27017"
