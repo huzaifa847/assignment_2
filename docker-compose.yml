@@ -6,10 +6,10 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - .:/app
+      # This ensures it looks exactly where your code was fetched
+      - /var/lib/jenkins/workspace/Attendance:/app
     working_dir: /app
-    # This command handles different start scripts automatically
-    command: sh -c "npm install && (npm start || node server.js || node index.js)"
+    command: sh -c "npm install && (npm start || node server.js)"
     environment:
       - MONGODB_URI=mongodb://db-jenkins:27017/student-attendance
     depends_on:
