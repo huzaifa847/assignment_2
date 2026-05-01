@@ -106,7 +106,7 @@ pipeline {
             steps {
                 echo '>>> Running 25 Selenium test cases...'
                 sh '''
-                    mkdir -p ${WORKSPACE}/test-results
+                    mkdir -p "${WORKSPACE}/test-results"
 
                     docker run --rm \
                         --network host \
