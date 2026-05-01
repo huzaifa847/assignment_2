@@ -21,7 +21,9 @@ pipeline {
     stage('Clean Docker Space') {
     steps {
         echo '>>> Freeing up disk space...'
-        sh 'docker system prune -af || true' 
+        sh 'docker system prune -af --volumes || true'
+        sh 'docker builder prune -af || true'
+        sh 'docker image prune -af || true'
     }
 }
         stage('Build App Docker Image') {
