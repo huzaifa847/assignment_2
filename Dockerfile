@@ -1,18 +1,21 @@
-FROM node:20-alpine
+
+FROM node:18-alpine
 
 WORKDIR /app
-RUN apk add --no-cache libc6-compat
 
 COPY package*.json ./
 
-
-RUN npm ci
+RUN npm install
 
 COPY . .
+
+ENV MONGODB_URI=mongodb://amirzari53143_db_user:amir@ac-odolqzq-shard-00-00.cdh5paf.mongodb.net:27017,ac-odolqzq-shard-00-01.cdh5paf.mongodb.net:27017,ac-odolqzq-shard-00-02.cdh5paf.mongodb.net:27017/?ssl=true&replicaSet=atlas-i4bd2v-shard-0&authSource=admin&retryWrites=true&w=majority&appName=Huzaifadevops
+ENV JWT_SECRET=supersecretjwtkey_123456789
+ENV NODE_ENV=production
+ENV PORT=3000
+
 RUN npm run build
 
-ENV NODE_ENV=production
-ENV PORT=5000
+EXPOSE 3000
 
-EXPOSE 5000
-CMD ["npm","run","start","--","-p","5000","-H","0.0.0.0"]
+CMD ["npm", "start"]
