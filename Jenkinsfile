@@ -103,25 +103,19 @@ pipeline {
         }
 
         stage('Run Selenium Tests') {
-            steps {
-                echo '>>> Running 25 Selenium test cases...'
-                sh '''
-                    mkdir -p "${WORKSPACE}/test-results"
-
-                    docker run --rm \
-                        --network host \
-                        -v ${WORKSPACE}/test-results:/app/test-results \
-                        ${TEST_IMAGE} \
-                        python -m pytest tests/attendance_test.py \
-                            -v \
-                            --tb=short \
-                            --html=/app/test-results/report.html \
-                            --self-contained-html \
-                            -p no:warnings \
-                        2>&1 | tee ${WORKSPACE}/test-output.txt || true
-                '''
-            }
-        }
+    steps {
+        echo '>>> Running 25 Selenium test cases...'
+        sh '''
+            mkdir -p "$WORKSPACE/test-results"
+            
+            docker run --rm --network host \
+              -v "$WORKSPACE/test-results:/app/test-results" \
+              attendance-tests \
+              python -m pytest tests/attendance_test.py -v --tb=short --html=/app/test-results/report.html --self-contained-html -p no:warnings | tee "$WORKSPACE/test-output.txt" || true
+        '''
+    }
+}
+    
     }
 
     post {
