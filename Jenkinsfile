@@ -18,7 +18,12 @@ pipeline {
                     url: 'https://github.com/huzaifa847/assignment_2.git'
             }
         }
-
+    stage('Clean Docker Space') {
+    steps {
+        echo '>>> Freeing up disk space...'
+        sh 'docker system prune -af || true' 
+    }
+}
         stage('Build App Docker Image') {
             steps {
                 echo '>>> Building Docker image for Next.js app...'
