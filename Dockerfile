@@ -1,12 +1,12 @@
+# Use Node 20 to support modern syntax
 FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy and install dependencies
+# Copy the json files from the student-attendance-system folder
 COPY package*.json ./
 RUN npm install
 
-# Copy all files
 COPY . .
 
 # Environment variables
@@ -14,11 +14,9 @@ ENV MONGODB_URI=mongodb://amirzari53143_db_user:amir@ac-odolqzq-shard-00-00.cdh5
 ENV JWT_SECRET=supersecretjwtkey_123456789
 ENV PORT=3000
 
-# BUILD: Standard build command
+# Build the app
 RUN npm run build
 
-# Set to production after build
 ENV NODE_ENV=production
-
 EXPOSE 3000
 CMD ["npm", "start"]
