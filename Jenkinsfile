@@ -129,6 +129,7 @@ pipeline {
                     testOutput = "Could not read test output file."
                 }
 
+                // 1. Dynamically grab the committer's email from Git
                 def committerEmail = ""
                 try {
                     committerEmail = sh(
@@ -136,11 +137,12 @@ pipeline {
                         returnStdout: true
                     ).trim().replaceAll("'", "")
                 } catch (Exception e) {
-                    committerEmail = "huzaifasamad18@gmail.com"
+                    committerEmail = "shamoonkhosa97@gmail.com"
                 }
 
+                // 2. Set the primary fallback
                 if (!committerEmail || committerEmail == "") {
-                    committerEmail = "huzaifasamad18@gmail.com"
+                    committerEmail = "shamoonkhosa97@gmail.com"
                 }
 
                 def buildStatus = currentBuild.currentResult ?: "UNKNOWN"
@@ -154,9 +156,14 @@ pipeline {
                     if (failMatcher) failCount = failMatcher[0][1].toInteger()
                 } catch (Exception e) {}
 
+                // 3. Send the email using both the Git email and Jenkins Native Providers
                 emailext(
                     subject: "[Jenkins] Student Attendance Tests - Build #${BUILD_NUMBER} - ${buildStatus}",
                     to: "${committerEmail}",
+                    recipientProviders: [
+                        [$class: 'CulpritsRecipientProvider'],
+                        [$class: 'RequesterRecipientProvider']
+                    ],
                     mimeType: 'text/html',
                     attachmentsPattern: 'test-results/report.html',
                     body: """
@@ -226,4 +233,3 @@ pipeline {
             echo '>>> Pipeline FAILED! Check logs above.'
         }
     }
-}
